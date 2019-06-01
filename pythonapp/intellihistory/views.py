@@ -11,6 +11,7 @@ from langdetect import detect
 from tqdm import tqdm_notebook
 
 from intellihistory.classes import SessionUrl, UserSession
+from intellihistory.modelling import summarizePage
 
 # Use a service account
 cred = credentials.Certificate('intelli-history-af3a3c220a14.json')
@@ -50,6 +51,15 @@ def modelSession(request):
         print(data.head())
         tqdm_notebook().pandas()
         data['lang'] = data.articles.progress_map(detect)
+
+@csrf_exempt
+def summary(request):
+        if request.method == 'POST':
+                url = request.POST.get('url')
+                summary = summarizePage(url)
+                return HttpResponse(summary)
+        else:
+                return HttpResponse("The method is not POST")
         
 
 
