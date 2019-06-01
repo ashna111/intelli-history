@@ -1,0 +1,30 @@
+{
+  "name": "Manage",
+  "version": "1.0",
+  "description": "Just experimenting!",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "history",
+    "tabs"
+  ],
+  "manifest_version": 2,
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ]
+    }
+  ],
+"browser_action": {
+    "default_title": "Test",
+    "default_popup": "index.html"
+},
+"permissions": [
+    "activeTab",
+    "<all_urls>"
+]
+  }
