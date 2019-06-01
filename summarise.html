@@ -43,15 +43,58 @@
                             <ul class="nav navbar-nav">
                                 <li><a href="search.html">Search</a></li>
                                 <li><a href="session.html">Session History</a></li>
-                                <li class="active"><a href="summarise.html">Summarise Content</a></li>
+                                <li class="active"><a href="summarise.html">URL to PPT</a></li>
                             </ul>
                         </div>
                     </div>
                 </nav>
             </div>
-            <div class="col-sm-9 col-lg-10" id="home">
+            <div class="col-sm-9 col-lg-10 summarise">
                 <!-- your page content -->
-                <h2>Summarise</h2>
+                <h2 style="padding-bottom:20px;">Summarise Your Content!</h2>
+                <div class="row">
+                    <div class="col-md-3" style="text-align: center;font-size:16px;font-family: 'Raleway'">
+                        <p>Generate Your Summary : </p>
+                    </div>
+                    <div class="col-md-9">
+                        <form action="">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Enter URL">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="row summary-content">
+                    <h2>Your work done :)</h2>
+                    <h3>The generated summary is as :</h3>
+                    <!-- loop from here -->
+                    <div>
+                        <h3><strong>Heading one</strong></h3>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae, fugit odio blanditiis
+                            molestiae minus mollitia aut ab odit porro culpa provident eaque dolorem dolorum a, amet sit
+                            quo, pariatur suscipit!</p>
+                        <h3><strong>Heading two</strong></h3>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae, fugit odio blanditiis
+                            molestiae minus mollitia aut ab odit porro culpa provident eaque dolorem dolorum a, amet sit
+                            quo, pariatur suscipit!</p>
+                        <h3><strong>Heading three</strong></h3>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae, fugit odio blanditiis
+                            molestiae minus mollitia aut ab odit porro culpa provident eaque dolorem dolorum a, amet sit
+                            quo, pariatur suscipit!</p>
+                    </div>
+                </div>
+
+                <div style="margin:20px;text-align:center;font-family: 'Raleway'">
+                    <h3 style="font-size:18px;">Ohoo! Your summary has been generated! What would you like to do now?
+                    </h3>
+                    <form action="" style="display:inline;margin:10px;">
+                        <button class="generate-btn">Generate PPT</button>
+                    </form>
+                    <form action="" style="display:inline;">
+                        <button class="generate-btn">Generate PDF</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
