@@ -1,0 +1,22 @@
+/* Slider css */
+.courses h2 {
+  padding-top: 10px;
+  font-family: "Raleway", sans-serif;
+  font-size:18px;
+}
+.slider {
+  padding: 20px 40px 0px 40px;
+}
+.slick-slider { 
+  display: table; table-layout: fixed; width: 100%;
+}
+.course-item {
+  margin: 5px;
+}
+.course-item .panel-heading {
+  font-family: "Raleway", sans-serif;
+}
+.course-item .thumbnail img{
+  height:150px;
+  width:200px;
+}
