@@ -1,0 +1,328 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Session History</title>
+    <!-- bootstrap css -->
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- sidebar css -->
+    <link rel="stylesheet" type="text/css" href="{% static 'intellihistory/css/navbar-fixed-side.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'intellihistory/css/slick.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'intellihistory/css/slick-theme.css' %}">
+    <!-- google fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Raleway:500" rel="stylesheet" />
+    <!-- slick slider -->
+    <!--
+        <link rel="stylesheet" type="text/css" href="plugins/slick/slick.css" />
+    <link rel="stylesheet" type="text/css" href="plugins/slick/slick-theme.css" />
+    -->
+
+    <style>
+        @media (max-width: 768px){.navbar-fixed-side{margin-left:-15px;margin-right:-15px}}@media (min-width: 768px){.navbar-fixed-side{position:fixed;margin:0 -15px;height:100vh;width:inherit;overflow:auto;border-top-width:0;border-bottom-width:0;border-radius:0}.navbar-fixed-side .container,.navbar-fixed-side .container-fluid{width:auto;padding-left:0;padding-right:0}.navbar-fixed-side .navbar-header{float:none}.navbar-fixed-side .navbar-brand{height:auto}.navbar-fixed-side>.container .navbar-brand,.navbar-fixed-side>.container-fluid .navbar-brand{margin-left:0}.navbar-fixed-side .navbar-collapse{width:100%;border-top:1px solid #e7e7e7}.navbar-fixed-side .navbar-nav{float:none;margin:0 -15px}.navbar-fixed-side .navbar-nav>li{float:none}.navbar-fixed-side .navbar-nav>li>a{padding-top:10px;padding-bottom:10px;border-bottom:1px solid #e7e7e7}.navbar-fixed-side .navbar-form{margin:0;margin-left:-15px;margin-right:-15px;padding:10px 15px;border-bottom:1px solid #e7e7e7}.navbar-fixed-side .navbar-text{float:none;margin-left:0;margin-right:0}.navbar-fixed-side .navbar-left,.navbar-fixed-side .navbar-right{float:none !important}.navbar-fixed-side .navbar-nav .dropdown-menu{position:static;float:none;width:auto;margin-top:0;background-color:transparent;border:0;box-shadow:none;border-bottom:1px solid #e7e7e7}.navbar-fixed-side .navbar-nav .dropdown-menu>li>a,.navbar-fixed-side .navbar-nav .dropdown-menu .dropdown-header{padding:5px 15px 5px 25px}.navbar-fixed-side .navbar-nav .dropdown-menu>li>a{line-height:20px;color:#777}.navbar-fixed-side .navbar-nav .dropdown-menu>li>a:hover,.navbar-fixed-side .navbar-nav .dropdown-menu>li>a:focus{background-image:none}.navbar-fixed-side .navbar-nav .dropdown-menu>.active>a{background-color:#e7e7e7;color:#555}.navbar-fixed-side .navbar-nav>li>a:hover,.navbar-fixed-side .navbar-nav>li>a:focus,.navbar-fixed-side .navbar-nav .dropdown-menu>li>a:hover,.navbar-fixed-side .navbar-nav .dropdown-menu>li>a:focus{background-color:#f0f0f0;color:#333}.navbar-fixed-side .dropdown>.dropdown-toggle,.navbar-fixed-side .dropdown-menu>.dropdown-header{background-color:transparent !important;color:#9d9d9d !important;cursor:default;font-size:0.8em;text-transform:uppercase;border-bottom:none;padding-bottom:0}.navbar-fixed-side .dropdown-toggle .caret{display:none}.navbar-fixed-side .dropdown-menu{display:block}.navbar-fixed-side.navbar-inverse .navbar-collapse,.navbar-fixed-side.navbar-inverse .navbar-nav>li>a,.navbar-fixed-side.navbar-inverse .navbar-form,.navbar-fixed-side.navbar-inverse .navbar-nav .dropdown-menu{border-color:#363636}.navbar-fixed-side.navbar-inverse .divider{background-color:#363636}.navbar-fixed-side.navbar-inverse .navbar-nav .dropdown-menu>li>a{color:#9d9d9d}.navbar-fixed-side.navbar-inverse .navbar-nav .dropdown-menu>.active>a{background-color:#090909;color:#fff}.navbar-fixed-side.navbar-inverse .navbar-nav>li:not(.active)>a:hover,.navbar-fixed-side.navbar-inverse .navbar-nav>li:not(.active)>a:focus,.navbar-fixed-side.navbar-inverse .navbar-nav .dropdown-menu>li:not(.active)>a:hover,.navbar-fixed-side.navbar-inverse .navbar-nav .dropdown-menu>li:not(.active)>a:focus{background-color:#2f2f2f;color:#fff}.navbar-fixed-side.navbar-inverse .dropdown>.dropdown-toggle{color:#777777 !important}}
+    </style>
+    
+    <!-- custom css -->
+    <link rel="stylesheet" type="text/css" href="{% static 'intellihistory/css/style.css' %}" />
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <!-- Font awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+        integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous" />
+
+
+
+    <style>
+        .node {
+		cursor: pointer;
+	}
+	.node circle {
+	  fill: #fff;
+	  stroke: steelblue;
+	  stroke-width: 3px;
+	}
+	.node text {
+	  font: 12px sans-serif;
+	}
+	.link {
+	  fill: none;
+	  stroke: #ccc;
+	  stroke-width: 2px;
+	}
+
+    svg {
+        margin-left: 220px;
+        
+    }
+    </style>
+</head>
+
+<body>
+
+    <!-- Side navbar -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 col-lg-2">
+                <nav class="navbar navbar-default navbar-fixed-side">
+                    <!-- normal collapsible navbar markup -->
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                            <a class="navbar-brand" href="dashboard.html">IntelliHistory</a>
+                        </div>
+                        <div class="collapse navbar-collapse" id="myNavbar">
+                            <ul class="nav navbar-nav">
+                                <li><a href="{% url 'search'  %}">Search</a></li>
+                                <li><a href="{% url 'session'  %}">Session History</a></li>
+                                
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <div class="col-sm-9 col-lg-10 session">
+                <!-- your page content -->
+                <h2>Session History</h2>
+                <!-- Slider template -->
+                <div class="container courses" style="padding:20px;">
+
+                    <!-- heading to be changed dynamically -->
+                    <h2>Today</h2>
+                    <div class="row slider">
+                        <div>
+                            <div class="col-xl-3">
+                                <div class="panel panel-default course-item">
+                                    <div class='thumbnail'>
+                                        <img src='https://ialab.it.monash.edu/webcola/examples/smallworldwithgroups.png' />
+                                    </div>
+                                    <div class='panel-heading'>Python in Android</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="col-xl-3">
+                                <div class="panel panel-default course-item">
+                                    <div class='thumbnail'>
+                                        <img
+                                            src='https://ialab.it.monash.edu/webcola/examples/smallworldwithgroups.png' />
+                                    </div>
+                                    <div class='panel-heading'>Python for Software</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="col-xl-3">
+                                <div class="panel panel-default course-item">
+                                    <div class='thumbnail'>
+                                        <img src='https://ialab.it.monash.edu/webcola/examples/smallworldwithgroups.png' />
+                                    </div>
+                                    <div class='panel-heading'>Python in Web</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="col-xl-3">
+                                <div class="panel panel-default course-item">
+                                    <div class='thumbnail'>
+                                        <img
+                                            src='https://ialab.it.monash.edu/webcola/examples/smallworldwithgroups.png' />
+                                    </div>
+                                    <div class='panel-heading'>Python in ML</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="col-xl-3">
+                                <div class="panel panel-default course-item">
+                                    <div class='thumbnail'>
+                                        <img
+                                            src='https://ialab.it.monash.edu/webcola/examples/smallworldwithgroups.png' />
+                                    </div>
+                                    <div class='panel-heading'>Python in Simulation</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+
+            </div>
+            <script>
+        var treeData = [
+        {
+            "name": "https://developer.chrome.com/extensions",
+            "parent": "null",
+            "children": [
+            {
+                "name": "https://developer.chrome.com/extensions/getstarted",
+                "parent": "Top Level",
+                "children": [
+                {
+                    "name": "https://developer.chrome.com/extensions/overview",
+                    "parent": "https://developer.chrome.com/extensions/getstarted"
+                },
+                {
+                    "name": "https://developer.chrome.com/extensions/developerGuide",
+                    "parent": "https://developer.chrome.com/extensions/getstarted"
+                }
+                ]
+            },
+            {
+                "name": "https://developer.chrome.com/extensions/getstarted",
+                "parent": "Top Level"
+            },
+            {
+                "name": "https://stackoverflow.com/questions/31122797/making-an-array-in-chrome-storage-and-retrieving-data?lq=",
+                "parent": "Top Level"
+            },
+            {
+                "name": "https://stackoverflow.com/questions/31122797/making-an-array-in-chrome-storage-and-retrieving-data?lq=",
+                "parent": "Top Level",
+                "children": [
+                {
+                    "name": "https://stackoverflow.com/questions/31122797/making-an-array-in-chrome-storage-and-retrieving-data?lq=",
+                    "parent": "Level 2: C"
+                },
+                {
+                    "name": "https://stackoverflow.com/questions/31122797/making-an-array-in-chrome-storage-and-retrieving-data?lq=",
+                    "parent": "Level 2: C"
+                }
+                ]
+            },
+            ]
+        }
+        ];
+
+        
+        var margin = {top: 0, right: 20, bottom: 20, left: 200},
+        width = 960 - margin.right - margin.left;
+        height = 500 - margin.top - margin.bottom;
+        
+        var i = 0,
+	    duration = 750,
+	    root;
+        var tree = d3.layout.tree().size([height, width]);
+        var diagonal = d3.svg.diagonal()
+            .projection(function(d) { return [d.y, d.x]; });
+        var svg = d3.select("body").append("svg")
+            .attr("width", width + margin.right + margin.left)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        root = treeData[0];
+        root.x0 = height/2;
+        root.y0 = 0;
+        update(root);
+        d3.select(self.frameElement).style("height", "500px");
+        function update(source) {
+            var nodes = tree.nodes(root).reverse();
+            var links = tree.links(nodes);
+            nodes.forEach(function(d) { d.y = d.depth * 180;});
+            var node = svg.selectAll('g.node')
+                        .data(nodes, function(d) { return d.id || (d.id = ++i); });
+            // Enter any new nodes at the parent's previous position.
+            var nodeEnter = node.enter().append("g")
+                .attr("class", "node")
+                .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
+                .on("click", click);
+            nodeEnter.append("circle")
+                .attr("r", 1e-6)
+                .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+            nodeEnter.append("text")
+                .attr("x", function(d) { return d.children || d._children ? -13 : 13; })
+                .attr("dy", ".35em")
+                .attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
+                .text(function(d) { return d.name; })
+                .style("fill-opacity", 1e-6);
+            // Transition nodes to their new position.
+            var nodeUpdate = node.transition()
+                .duration(duration)
+                .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
+            nodeUpdate.select("circle")
+                .attr("r", 10)
+                .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+            nodeUpdate.select("text")
+                .style("fill-opacity", 1);
+            // Transition exiting nodes to the parent's new position.
+            var nodeExit = node.exit().transition()
+                .duration(duration)
+                .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
+                .remove();
+            nodeExit.select("circle")
+                .attr("r", 1e-6);
+            nodeExit.select("text")
+                .style("fill-opacity", 1e-6);
+            // Update the links…
+            var link = svg.selectAll("path.link")
+                .data(links, function(d) { return d.target.id; });
+            // Enter any new links at the parent's previous position.
+            link.enter().insert("path", "g")
+                .attr("class", "link")
+                .attr("d", function(d) {
+                    var o = {x: source.x0, y: source.y0};
+                    return diagonal({source: o, target: o});
+                });
+            // Transition links to their new position.
+            link.transition()
+                .duration(duration)
+                .attr("d", diagonal);
+            // Transition exiting nodes to the parent's new position.
+            link.exit().transition()
+                .duration(duration)
+                .attr("d", function(d) {
+                    var o = {x: source.x, y: source.y};
+                    return diagonal({source: o, target: o});
+                })
+                .remove();
+            // Stash the old positions for transition.
+            nodes.forEach(function(d) {
+                d.x0 = d.x;
+                d.y0 = d.y;
+            });
+            }
+            // Toggle children on click.
+            function click(d) {
+            if (d.children) {
+                d._children = d.children;
+                d.children = null;
+            } else {
+                d.children = d._children;
+                d._children = null;
+            }
+            update(d);
+            }
+                    
+                </script>
+        </div>
+    </div>
+
+    
+
+
+
+    <!-- jquery -->
+    <script src="{% static 'intellihistory/js/jquery.js' %}" type="text/javascript"></script>
+    <!-- bootstrap js -->
+    <!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <!-- slick slider -->
+    
+    <script type="text/javascript" src="{% static 'intellihistory/js/slick.min.js' %}"></script>
+
+    
+    <!-- custom js -->
+    <script src="{% static 'intellihistory/js/script.js' %}" type="text/javascript"></script>
+
+
+</body>
+
+</html>

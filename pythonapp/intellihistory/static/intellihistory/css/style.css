@@ -27,8 +27,8 @@
 
 /* Navbar css */
 .navbar{
-  background-color:#383838;
-  border-color: #383838;
+  background-color: rgb(59, 58, 59);
+  border-color: black;
 }
 .nav li{
   border-color:transparent;
@@ -72,6 +72,7 @@
   background-color: #f4f2f2;
   margin-top:0px;
   padding-top: 0px;
+
 }
 .session h2{
   font-family: "Raleway", sans-serif;
@@ -90,6 +91,7 @@
   background-color: #f4f2f2;
   margin-top:0px;
   padding-top: 0px;
+  
 }
 .summarise h2{
   font-family: "Raleway", sans-serif;
@@ -143,7 +145,7 @@ input[type="text"]:focus{
   background-color: #f4f2f2;
   margin-top:0px;
   padding-top: 0px;
-  min-height: 700px;
+  min-height: 650px;
 }
 .search h2{
   font-family: "Raleway", sans-serif;
@@ -156,21 +158,23 @@ input[type="text"]:focus{
   background-color: #f4f2f2;
   margin-top:0px;
   padding-top: 0px;
-  min-height: 600px;
+  min-height: 650px;
 }
 .home h2{
   font-family: "Raleway", sans-serif;
-  font-size:22px;
+  font-size:24px;
   text-align: center;
   padding:20px;
 }
-.home h4{
+.home h4,h5{
   font-family: "Raleway", sans-serif;
   font-size:20px;
-  text-align: center;
 }
 .home p{
   font-family: "Raleway", sans-serif;
-  font-size:20px;
-  text-align: center;
+  font-size:16px;
+}
+.home ul li{
+  font-family: "Raleway", sans-serif;
+  font-size:16px;
 }

@@ -32,96 +32,96 @@ from fpdf import FPDF
 from gensim.summarization import keywords
 
 
-# creates 
+# # creates 
 
-# reading
-data = pd.read_csv('articles_bbc_2018_01_30.csv')
-print(data.shape)
-data = data.dropna().reset_index(drop=True)
-print(data.shape)
-print(data.head())
+# # reading
+# data = pd.read_csv('articles_bbc_2018_01_30.csv')
+# print(data.shape)
+# data = data.dropna().reset_index(drop=True)
+# print(data.shape)
+# print(data.head())
 
-# cleaning
-tqdm_notebook().pandas()
-data['lang'] = data.articles.progress_map(detect)
-data.lang.value_counts()
-data = data.loc[data.lang=='en']
+# # cleaning
+# tqdm_notebook().pandas()
+# data['lang'] = data.articles.progress_map(detect)
+# data.lang.value_counts()
+# data = data.loc[data.lang=='en']
 
-#tokenization
-# nltk.download('punkt')
-data['sentences'] = data.articles.progress_map(nltk.sent_tokenize)
-data['sentences'].head(1).tolist()[0][:3] # Print the first 3 sentences of the 1st article
-data['tokens_sentences'] = data['sentences'].progress_map(lambda sentences: [word_tokenize(sentence) for sentence in sentences])
-print(data['tokens_sentences'].head(1).tolist()[0][:3])
+# #tokenization
+# # nltk.download('punkt')
+# data['sentences'] = data.articles.progress_map(nltk.sent_tokenize)
+# data['sentences'].head(1).tolist()[0][:3] # Print the first 3 sentences of the 1st article
+# data['tokens_sentences'] = data['sentences'].progress_map(lambda sentences: [word_tokenize(sentence) for sentence in sentences])
+# print(data['tokens_sentences'].head(1).tolist()[0][:3])
 
-# Lemmatizing with POS tagging
-data['POS_tokens'] = data['tokens_sentences'].progress_map(lambda tokens_sentences: [pos_tag(tokens) for tokens in tokens_sentences])
-print(data['POS_tokens'].head(1).tolist()[0][:3])
+# # Lemmatizing with POS tagging
+# data['POS_tokens'] = data['tokens_sentences'].progress_map(lambda tokens_sentences: [pos_tag(tokens) for tokens in tokens_sentences])
+# print(data['POS_tokens'].head(1).tolist()[0][:3])
 
-def get_wordnet_pos(treebank_tag):
-        if treebank_tag.startswith('J'):
-                return wordnet.ADJ
-        elif treebank_tag.startswith('V'):
-                return wordnet.VERB
-        elif treebank_tag.startswith('N'):
-                return wordnet.NOUN
-        elif treebank_tag.startswith('R'):
-                return wordnet.ADV
-        else:
-                return ''
-lemmatizer = WordNetLemmatizer()
-# Lemmatizing each word with its POS tag, in each sentence
-data['tokens_sentences_lemmatized'] = data['POS_tokens'].progress_map(
-lambda list_tokens_POS: [
-        [
-        lemmatizer.lemmatize(el[0], get_wordnet_pos(el[1])) 
-        if get_wordnet_pos(el[1]) != '' else el[0] for el in tokens_POS
-        ] 
-        for tokens_POS in list_tokens_POS
-]
-)     
-data['tokens_sentences_lemmatized'].head(1).tolist()[0][:3]
-stoplist = stopwords.words('english')
+# def get_wordnet_pos(treebank_tag):
+#         if treebank_tag.startswith('J'):
+#                 return wordnet.ADJ
+#         elif treebank_tag.startswith('V'):
+#                 return wordnet.VERB
+#         elif treebank_tag.startswith('N'):
+#                 return wordnet.NOUN
+#         elif treebank_tag.startswith('R'):
+#                 return wordnet.ADV
+#         else:
+#                 return ''
+# lemmatizer = WordNetLemmatizer()
+# # Lemmatizing each word with its POS tag, in each sentence
+# data['tokens_sentences_lemmatized'] = data['POS_tokens'].progress_map(
+# lambda list_tokens_POS: [
+#         [
+#         lemmatizer.lemmatize(el[0], get_wordnet_pos(el[1])) 
+#         if get_wordnet_pos(el[1]) != '' else el[0] for el in tokens_POS
+#         ] 
+#         for tokens_POS in list_tokens_POS
+# ]
+# )     
+# data['tokens_sentences_lemmatized'].head(1).tolist()[0][:3]
+# stoplist = stopwords.words('english')
 
-# Regrouping tokens and removing stop words
-stopwords_verbs = ['say', 'get', 'go', 'know', 'may', 'need', 'like', 'make', 'see', 'want', 'come', 'take', 'use', 'would', 'can']
-stopwords_other = ['one', 'mr', 'bbc', 'image', 'getty', 'de', 'en', 'caption', 'also', 'copyright', 'something']
-my_stopwords = stopwords.words('english') + stopwords_verbs + stopwords_other
-data['tokens'] = data['tokens_sentences_lemmatized'].map(lambda sentences: list(chain.from_iterable(sentences)))
-data['tokens'] = data['tokens'].map(lambda tokens: [token.lower() for token in tokens if token.isalpha() 
-                                                and token.lower() not in my_stopwords and len(token)>1])
+# # Regrouping tokens and removing stop words
+# stopwords_verbs = ['say', 'get', 'go', 'know', 'may', 'need', 'like', 'make', 'see', 'want', 'come', 'take', 'use', 'would', 'can']
+# stopwords_other = ['one', 'mr', 'bbc', 'image', 'getty', 'de', 'en', 'caption', 'also', 'copyright', 'something']
+# my_stopwords = stopwords.words('english') + stopwords_verbs + stopwords_other
+# data['tokens'] = data['tokens_sentences_lemmatized'].map(lambda sentences: list(chain.from_iterable(sentences)))
+# data['tokens'] = data['tokens'].map(lambda tokens: [token.lower() for token in tokens if token.isalpha() 
+#                                                 and token.lower() not in my_stopwords and len(token)>1])
 
-data['tokens'].head(1).tolist()[0][:30]
+# data['tokens'].head(1).tolist()[0][:30]
 
-# lda 
-# data preparation
-# Prepare bi-grams and tri-grams
-tokens = data['tokens'].tolist()
-bigram_model = Phrases(tokens)
-trigram_model = Phrases(bigram_model[tokens], min_count=1)
-tokens = list(trigram_model[bigram_model[tokens]])
+# # lda 
+# # data preparation
+# # Prepare bi-grams and tri-grams
+# tokens = data['tokens'].tolist()
+# bigram_model = Phrases(tokens)
+# trigram_model = Phrases(bigram_model[tokens], min_count=1)
+# tokens = list(trigram_model[bigram_model[tokens]])
 
-# Prepare objects for LDA gensim implementation
-dictionary_LDA = corpora.Dictionary(tokens)
-dictionary_LDA.filter_extremes(no_below=3)
-corpus = [dictionary_LDA.doc2bow(tok) for tok in tokens]
+# # Prepare objects for LDA gensim implementation
+# dictionary_LDA = corpora.Dictionary(tokens)
+# dictionary_LDA.filter_extremes(no_below=3)
+# corpus = [dictionary_LDA.doc2bow(tok) for tok in tokens]
 
-# running lda
-np.random.seed(123456)
-num_topics = 20
-lda_model = models.LdaModel(corpus, num_topics=num_topics, \
-                                id2word=dictionary_LDA, \
-                                passes=4, alpha=[0.01]*num_topics, \
-                                eta=[0.01]*len(dictionary_LDA.keys()))
+# # running lda
+# np.random.seed(123456)
+# num_topics = 20
+# lda_model = models.LdaModel(corpus, num_topics=num_topics, \
+#                                 id2word=dictionary_LDA, \
+#                                 passes=4, alpha=[0.01]*num_topics, \
+#                                 eta=[0.01]*len(dictionary_LDA.keys()))
 
-# exploration
-# Looking at topics
-for i,topic in lda_model.show_topics(formatted=True, num_topics=num_topics, num_words=20):
-        print(str(i)+": "+ topic)
-        print()
-# Allocating topics to documents
-print(data.articles.loc[0][:500])
-lda_model[corpus[0]]
+# # exploration
+# # Looking at topics
+# for i,topic in lda_model.show_topics(formatted=True, num_topics=num_topics, num_words=20):
+#         print(str(i)+": "+ topic)
+#         print()
+# # Allocating topics to documents
+# print(data.articles.loc[0][:500])
+# lda_model[corpus[0]]
 
 
 def predictTopic(url):
@@ -331,4 +331,4 @@ def getKeywords(url):
 
 
 
-predictTopic("https://plato.stanford.edu/entries/actualism-possibilism-ethics/")
+#predictTopic("https://plato.stanford.edu/entries/actualism-possibilism-ethics/")

@@ -29,6 +29,15 @@ def dashboard(request):
 
         return render(request,'intellihistory/dashboard.html')
 
+def search(request):
+        return render(request, 'intellihistory/search.html')
+
+def session(request):
+        return render(request, 'intellihistory/session.html')
+
+def summary(request):
+        return render(request, 'intellihistory/summary.html')
+
 @csrf_exempt
 def recordSession(request):
     # records the different urls visited in a single session
@@ -45,20 +54,35 @@ def recordSession(request):
 
         session_ref = db.collection('sessions').document(session_id)
         session = session_ref.get()
-        session = session.to_dict()
+        print(session)
+        print(u'{} => {}'.format(session.id, session.to_dict()))
         path = ''
-        for key, value in session:
-                if key == 'parent' and value == 'null':
-                        path = ''
-                elif key == 'name' and value == present_url:
-                        path = path + 'children'
-                elif session[key] != present_url:
-                        path = path + 'children'
+
+        session = session.to_dict()
+        
+        
+
+
+        for key, value in session.items():
+                if key == 'tree':
+                        for key, value in session['tree'].items():
+                                if key == 'parent' and value == 'null':
+                                        path = ''
+                                        print(path)
+                                elif key == 'name' and value == present_url:
+                                        path = path + 'children'
+                                        print(path)
+                                elif key == 'name' and value != present_url:
+                                        path = path + 'children'
+                                        print(path)
+                                print(path)
 
         print(path)
+
+        path = 'tree.' + path + 'children'
         
         db.collection(u'sessions').document(session_id).update({
-                [u'tree.' + path]: ArrayUnion([child])
+                path: ArrayUnion([child])
         })        
         return HttpResponse("This controller works too")
     else:
