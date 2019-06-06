@@ -13,6 +13,8 @@ At the end the user has a custom-made(according to selections) or automated summ
 * Topic modeling: inputs a word and displays the visual context of topics associated with the search
 * Option of generating automated summary in case of shortage of time 
 
+Chrome extension repository [here](https://github.com/opheliagame/chrome-extension)
+
 **Contributors**
 * [Anushka Trivedi](https://github.com/opheliagame)
 * [Shivani Save](https://github.com/shivani-save)
