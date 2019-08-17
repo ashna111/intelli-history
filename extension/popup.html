@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Intelli-history: Make your history smart</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="populate.js">
+
+    <style>
+        * {
+            color: white;
+        }
+    </style>
+
+</head>
+<body >
+
+    <div class="section" style="background: rgba(0.5, 0.5, 0.5, 0.5)">
+        <div class="heading" style="font-size: 20px;">IntelliHistory</div>
+
+        <section class="container">
+            <p>Record your session</p>
+            <label class="checkbox">
+                <input type="checkbox" id="record">
+                R
+            </label>
+        </section>
+    
+        <div class="section">
+            <p>This page is about..</p>
+            <div class="tags are-small are-primary">
+                <span class="tag">Hacking</span>
+                <span class="tag">Building</span>
+                <span class="tag">Creating</span>
+              </div>
+            </div>
+    
+        <section class="container has-text-centered">
+            <div class="list" id="user-selections" style="color: black;">
+                
+            </div>
+        
+            <button class="button is-small is-primary" id="select-button">
+                Select Text
+            </button>
+
+            <p style="font-size: 0.7rem">Select text on the page, and then click this button to save!</p>
+        </section>
+    
+        <section class="section has-text-centered">
+            <div class="container">
+            <button class="button is-small is-primary" id="makePPT">Summarize and Make PPT</button>
+
+            </div>
+            <div class="container">
+                    <button class="button is-small is-primary" id="makePDF">Summarize and Make PDF</button>
+
+            </div>
+        </section>
+    </div>
+    
+    <script src="popup.js"></script>
+    
+    
+</body>
+</html>
