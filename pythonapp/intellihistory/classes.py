@@ -2,9 +2,10 @@
 
 
 class SessionUrl(object):
-    def __init__(self, url, title):
+    def __init__(self, url, present_url, session_id):
         self.url = url
-        self.title = title
+        self.present_url = present_url
+        self.session_id = session_id
 
     def to_dict(self):
         return self.to_dict()

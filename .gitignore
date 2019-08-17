@@ -1,1 +1,3 @@
 .ipynb_checkpoints/*
+pythonapp/intellihistory/__pycache__/*
+pythonapp/pythonapp/__pycache__/*
